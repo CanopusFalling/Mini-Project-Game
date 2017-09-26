@@ -74,7 +74,7 @@ public class Main {
     private static void AIVSUserGame(String SPlayer1, String SPlayer2){
 
         Boolean BDifficultyChosen = false;
-        int IBotDifficulty;
+        int IBotDifficulty = 0;
 
         while(BDifficultyChosen == false) {
             //Asks the user what difficulty they would like to play on.
@@ -101,6 +101,7 @@ public class Main {
                 BPlayerStarting = true;
             }else if(UserInput.toLowerCase() == "b"){
                 BPlayerStarting = false;
+                AIMove(IBotDifficulty);
 
             }else{
                 System.out.println("This is not a valid option enter either S or P!");
@@ -109,9 +110,49 @@ public class Main {
 
         Boolean BGameCompleted = false;
 
-
+        //Runs the game untill completion.
         while(BGameCompleted == false){
+        }
+    }
 
+    public static void PostMoveModification(){
+        //Works out the token of the last player.
+        Integer LastPlayerToken = Grid[LastMove[0]][LastMove[1]];
+
+        //Proceeds to find the nearest token in all directions.
+        for(int i = 0; i <= 7; i++){
+            Boolean BFoundEnd = false;
+            int xadition = 0;
+            int yadition = 0;
+            if(i == 0 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 1 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 2 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 3 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 4 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 5 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 6 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }else if(i == 7 && LastMove[1] != 0){
+                xadition = 0;
+                yadition = 1;
+            }
+
+            while(BFoundEnd){
+
+            }
         }
     }
 
