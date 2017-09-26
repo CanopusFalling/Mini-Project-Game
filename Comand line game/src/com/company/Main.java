@@ -127,6 +127,8 @@ public class Main {
             Boolean BFoundEnd = false;
             int xadition = 0;
             int yadition = 0;
+
+            //This if Statement works out the directional x and y modifyers.
             if(i == 0 && LastMove[1] != 0){
                 xadition = 0;
                 yadition = 1;
