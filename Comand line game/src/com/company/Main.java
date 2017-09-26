@@ -2,6 +2,9 @@ package com.company;
 
 //Imports
 import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -117,9 +120,9 @@ public class Main {
 
     public static void PostMoveModification(){
         //Works out the token of the last player.
-        Integer LastPlayerToken = Grid[LastMove[0]][LastMove[1]];
+        Integer ILastPlayerToken = Grid[LastMove[0]][LastMove[1]];
 
-        //Proceeds to find the nearest token in all directions.
+        //Proceeds to find the nearest token of the player's nature in all directions.
         for(int i = 0; i <= 7; i++){
             Boolean BFoundEnd = false;
             int xadition = 0;
@@ -128,30 +131,41 @@ public class Main {
                 xadition = 0;
                 yadition = 1;
             }else if(i == 1 && LastMove[1] != 0){
-                xadition = 0;
+                xadition = 1;
                 yadition = 1;
             }else if(i == 2 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = 1;
+                xadition = 1;
+                yadition = 0;
             }else if(i == 3 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = 1;
+                xadition = 1;
+                yadition = -1;
             }else if(i == 4 && LastMove[1] != 0){
                 xadition = 0;
-                yadition = 1;
+                yadition = -1;
             }else if(i == 5 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = 1;
+                xadition = -1;
+                yadition = -1;
             }else if(i == 6 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = 1;
+                xadition = -1;
+                yadition = 0;
             }else if(i == 7 && LastMove[1] != 0){
-                xadition = 0;
+                xadition = -1;
                 yadition = 1;
             }
 
-            while(BFoundEnd){
-
+            int[] IACurrentCords = LastMove;
+            List<int[]> LAInbetweenCords = new ArrayList<int[]>();
+            
+            while(BFoundEnd == false){
+                IACurrentCords[0] = IACurrentCords[0] + xadition;
+                IACurrentCords[1] = IACurrentCords[1] + yadition;
+                if(Grid[IACurrentCords[0]][IACurrentCords[1]] == ILastPlayerToken){
+                    for (int[] j : LAInbetweenCords){
+                        Grid[j[0]][j[1]] = ILastPlayerToken;
+                    }
+                    BFoundEnd = true;
+                }
+                LAInbetweenCords.add(IACurrentCords);
             }
         }
     }
