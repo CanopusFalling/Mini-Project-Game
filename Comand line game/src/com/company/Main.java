@@ -1,11 +1,18 @@
 package com.company;
+
+//Imports
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
 
     //This is the grid array that will be used in the game to store all of the grids info.
     //0 = Not Taken, 1 = White Occupation, 2 = Black Occupation.
     private static int[][] Grid = new int[8][8];
+
+    //This stores the last move made so that the programme can change the grid according to the move made.
+    private static int[] LastMove = new int[2];
 
     public static void main(String[] args) {
         //This section of the code reads the user's choice as to the name of player 1
@@ -26,13 +33,14 @@ public class Main {
             SPlayer2Name = SPlayer2Name.replace("AI:", "");
         }
 
-        //This section initilises the game section.
+        //This code initialises the game section.
         if(BPlayer2IsAI == true){
-
+            AIVSUserGame(SPlayer1Name, SPlayer2Name);
         }
 
     }
     private static String ReadUser(String Message){
+
         //This is the function that reads all of the user's inputs.
         System.out.print(Message);
         Scanner UserInput = new Scanner(System.in);
@@ -41,6 +49,7 @@ public class Main {
     }
     //This function is responsible for printing the grid during a game.
     public static void PrintTable(String SPlayer1, String SPlayer2){
+
         //Prints out the player's names.
         System.out.println("Player 1: " + SPlayer1);
         System.out.println("Player 2: " + SPlayer2);
@@ -52,7 +61,7 @@ public class Main {
         }
         System.out.println("");
 
-        //This prins out the grid with the numbers along the left vertical column.
+        //This prints out the grid with the numbers along the left vertical column.
         for(int i = 0; i < 8; i++){
             System.out.print(i + '\t');
             for(int j = 0; j < 8; j++){
@@ -61,8 +70,70 @@ public class Main {
             System.out.println("");
         }
     }
-    private static void AIVSUserGame(String SPlayer1, String SPlayer2){
-        String SAiDifficulty = ReadUser("Select AI difficulty(Easy, Medium or Impossible): ");
 
+    private static void AIVSUserGame(String SPlayer1, String SPlayer2){
+
+        Boolean BDifficultyChosen = false;
+        int IBotDifficulty;
+
+        while(BDifficultyChosen == false) {
+            //Asks the user what difficulty they would like to play on.
+            String SAiDifficulty = ReadUser("Select AI difficulty(Easy, Medium or Impossible): ");
+            //Sets the bots difficulty and catches any user mistakes.
+            if (SAiDifficulty.toLowerCase() == "easy") {
+                System.out.println("This is essentially a random number generator you are playing against so it will act very stupidly.");
+                BDifficultyChosen = true;
+                IBotDifficulty = 0;
+            }else{
+                //catches all inputs that are unaccounted for above.
+                System.out.println("This mode is either non-existent or hasn't been fully implemented yet please make another choice.");
+            }
+        }
+
+        //This is 0 should the player go first and 1 should the bot go first.
+        Boolean BPlayerStarting;
+        Boolean BStartChosen = false;
+
+        //This code collects the users choice on who should go first.
+        while(BStartChosen == false){
+            String UserInput = ReadUser("Would you like to start(enter: p) or would you like the bot to start(enter: b): ");
+            if(UserInput.toLowerCase() == "p"){
+                BPlayerStarting = true;
+            }else if(UserInput.toLowerCase() == "b"){
+                BPlayerStarting = false;
+
+            }else{
+                System.out.println("This is not a valid option enter either S or P!");
+            }
+        }
+
+        Boolean BGameCompleted = false;
+
+
+        while(BGameCompleted == false){
+
+        }
+    }
+
+    //This function checks the bots difficulty and moves accordingly.
+    public static void AIMove(int IBotDifficulty){
+
+        if(IBotDifficulty == 0){
+            Boolean BBotMoveMade = false;
+            while (BBotMoveMade == false) {
+                //Generates random cords.
+                Random RANDBotMove = new Random();
+                int xcord = RANDBotMove.nextInt(7);
+                Random RANDBotMove2 = new Random();
+                int ycord = RANDBotMove2.nextInt(7);
+                //finds out if the cords are taken and adds them to the grid.
+                if(Grid[xcord][ycord] == 0){
+                    Grid[xcord][ycord] = 2;
+                    int [] xycords = {xcord, ycord};
+                    LastMove = xycords;
+                    BBotMoveMade = true;
+                }
+            }
+        }
     }
 }
