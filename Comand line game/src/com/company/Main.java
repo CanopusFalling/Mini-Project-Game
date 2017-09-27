@@ -39,6 +39,8 @@ public class Main {
         //This code initialises the game section.
         if(BPlayer2IsAI == true){
             AIVSUserGame(SPlayer1Name, SPlayer2Name);
+        }else{
+
         }
 
     }
@@ -74,6 +76,20 @@ public class Main {
         }
     }
 
+    private  static  void UserVSUserGame(String SPlayer1, String SPlayer2){
+
+        //Gets which user will start from the user.
+        String SPlayerStarting = ReadUser("Which Player Starts, " + SPlayer1 + " or " + SPlayer2 + ": ");
+        //Acts on the user's decision.
+        Boolean BPlayer1Starts = true;
+        if(SPlayerStarting == SPlayer1 || SPlayerStarting == "1"){
+            BPlayer1Starts = true;
+        }else if(SPlayerStarting == SPlayer2 || SPlayerStarting == "2"){
+            BPlayer1Starts = false;
+        }
+    }
+
+    //This runs the user's game vs the AI.
     private static void AIVSUserGame(String SPlayer1, String SPlayer2){
 
         Boolean BDifficultyChosen = false;
@@ -113,7 +129,7 @@ public class Main {
 
         Boolean BGameCompleted = false;
 
-        //Runs the game untill completion.
+        //Runs the game until completion.
         while(BGameCompleted == false){
         }
     }
@@ -191,6 +207,33 @@ public class Main {
                     BBotMoveMade = true;
                 }
             }
+        }
+    }
+
+    //Reads an Int from the user.
+    private  static Integer ReadUserInt(String SMessage){
+        Boolean BUserChoiceValid = false;
+        int IUserInput = 0;
+        while(BUserChoiceValid) {
+            System.out.println(SMessage);
+            Scanner ReadUser = new Scanner(System.in);
+            try {
+                IUserInput = Integer.parseInt(ReadUser.nextLine());
+                BUserChoiceValid = true;
+            }catch (Exception e) {
+                System.out.println(e);
+                System.out.println("^ That Is Because Of YOU! ^ ENTER A NUMBER!");
+            }
+        }
+        return  IUserInput;
+    }
+
+    //This handles all user moves.
+    public  static  void UserMove(int UserToken, String PlayerName){
+        Boolean BUserChoiceValid = false;
+        int[] IAUserCords = {0, 0};
+        IAUserCords[0] = ReadUserInt("Enter X Co-ordinate of the tile you want to place your piece on: ");
+        IAUserCords[1] = ReadUserInt("Enter Y Co-ordinate of the tile you want to place your piece on: ");
         }
     }
 }
