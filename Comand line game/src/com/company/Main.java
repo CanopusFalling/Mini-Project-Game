@@ -26,9 +26,18 @@ public class Main {
 
         }
 
+        String SPlayer2Name = "";
         //This section of the code reads the user's choice as to the name of player 2
-        String SPlayer2Name = ReadUser("Name of Player 2 (Make the prefix to the name 'AI:' should you want an AI to play against): ");
-
+        Boolean BNameTooShort = true;
+        while(BNameTooShort = true){
+            SPlayer2Name = ReadUser("Name of Player 2 (Make the prefix to the name 'AI:' should you want an AI to play against): ");
+            System.out.println(SPlayer2Name.length());
+            if(SPlayer2Name.length() >= 4){
+                BNameTooShort = false;
+            }else{
+                System.out.println("That name is too long.(sarcasm)");
+            }
+        }
         //This then checks if the user made the player 2 an AI.
         Boolean BPlayer2IsAI = false;
         if(SPlayer2Name.charAt(0) == 'A' && SPlayer2Name.charAt(1) == 'I' && SPlayer2Name.charAt(2) == ':'){
@@ -86,6 +95,8 @@ public class Main {
             BPlayer1Starts = true;
         }else if(SPlayerStarting == SPlayer2 || SPlayerStarting == "2"){
             BPlayer1Starts = false;
+            PrintTable(SPlayer1, SPlayer2);
+            UserMove(2, SPlayer2);
         }
     }
 
@@ -171,13 +182,18 @@ public class Main {
                 yadition = 1;
             }
 
+            //Finds the cords inbetween the last cords and the next user token in the direction iterating.
             int[] IACurrentCords = LastMove;
             List<int[]> LAInbetweenCords = new ArrayList<int[]>();
             
             while(BFoundEnd == false){
                 IACurrentCords[0] = IACurrentCords[0] + xadition;
                 IACurrentCords[1] = IACurrentCords[1] + yadition;
-                if(Grid[IACurrentCords[0]][IACurrentCords[1]] == ILastPlayerToken){
+                //Checks if the edge of the grid is reached.
+                if(IACurrentCords[0] > 7 || IACurrentCords[1] > 7 || IACurrentCords[0] < 0 || IACurrentCords[1] < 0 ){
+                    BFoundEnd = true;
+                }else if(Grid[IACurrentCords[0]][IACurrentCords[1]] == ILastPlayerToken){
+                    //Adds in all of the cords inbetween as the user's token.
                     for (int[] j : LAInbetweenCords){
                         Grid[j[0]][j[1]] = ILastPlayerToken;
                     }
@@ -229,11 +245,21 @@ public class Main {
     }
 
     //This handles all user moves.
-    public  static  void UserMove(int UserToken, String PlayerName){
+    public static void UserMove(int UserToken, String PlayerName){
         Boolean BUserChoiceValid = false;
         int[] IAUserCords = {0, 0};
-        IAUserCords[0] = ReadUserInt("Enter X Co-ordinate of the tile you want to place your piece on: ");
-        IAUserCords[1] = ReadUserInt("Enter Y Co-ordinate of the tile you want to place your piece on: ");
+        while (BUserChoiceValid == false) {
+            IAUserCords[0] = ReadUserInt("Enter X Co-ordinate of the tile you want to place your piece on: ");
+            IAUserCords[1] = ReadUserInt("Enter Y Co-ordinate of the tile you want to place your piece on: ");
+            if(IAUserCords[0] < 8 && IAUserCords[0] >= 0 && IAUserCords[1] < 8 && IAUserCords[1] >= 0){
+                BUserChoiceValid = true;
+            }
         }
+        Grid[IAUserCords[0]][IAUserCords[1]] = UserToken;
+        LastMove = IAUserCords;
+
+        PostMoveModification();
+
     }
 }
+
