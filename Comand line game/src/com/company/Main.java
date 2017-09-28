@@ -17,6 +17,9 @@ public class Main {
     //This stores the last move made so that the programme can change the grid according to the move made.
     private static int[] LastMove = new int[2];
 
+    //Sets up the middle pieces
+    //SetUpBoard();
+
     public static void main(String[] args) {
         //This section of the code reads the user's choice as to the name of player 1
         String SPlayer1Name = ReadUser("Name of Player 1: ");
@@ -52,6 +55,21 @@ public class Main {
 
         }
 
+    }
+    public static void SetUpBoard(){
+
+        //Fills the grid with 0's
+        for(int i = 0; i > 8; i++){
+            for(int j = 0; j > 8; j++){
+                Grid[i][j] = 0;
+            }
+        }
+
+        //Sets the four middle starting pieces
+        Grid[3][3] = 1;
+        Grid[4][3] = 2;
+        Grid[3][4] = 2;
+        Grid[4][4] = 1;
     }
     private static String ReadUser(String Message){
 
