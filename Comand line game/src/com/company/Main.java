@@ -32,10 +32,9 @@ public class Main {
         String SPlayer2Name = "";
         //This section of the code reads the user's choice as to the name of player 2
         Boolean BNameTooShort = true;
-        while(BNameTooShort = true){
+        while(BNameTooShort == true){
             SPlayer2Name = ReadUser("Name of Player 2 (Make the prefix to the name 'AI:' should you want an AI to play against): ");
-            System.out.println(SPlayer2Name.length());
-            if(SPlayer2Name.length() >= 4){
+            if((SPlayer2Name.length()) > 4){
                 BNameTooShort = false;
             }else{
                 System.out.println("That name is too long.(sarcasm)");
@@ -128,7 +127,7 @@ public class Main {
             //Asks the user what difficulty they would like to play on.
             String SAiDifficulty = ReadUser("Select AI difficulty(Easy, Medium or Impossible): ");
             //Sets the bots difficulty and catches any user mistakes.
-            if (SAiDifficulty.toLowerCase() == "easy") {
+            if (SAiDifficulty.toLowerCase().equals("easy")) {
                 System.out.println("This is essentially a random number generator you are playing against so it will act very stupidly.");
                 BDifficultyChosen = true;
                 IBotDifficulty = 0;
@@ -145,14 +144,14 @@ public class Main {
         //This code collects the users choice on who should go first.
         while(BStartChosen == false){
             String UserInput = ReadUser("Would you like to start(enter: p) or would you like the bot to start(enter: b): ");
-            if(UserInput.toLowerCase() == "p"){
+            if(UserInput.toLowerCase().equals("p")){
                 BPlayerStarting = true;
-            }else if(UserInput.toLowerCase() == "b"){
+            }else if(UserInput.toLowerCase().equals("b")){
                 BPlayerStarting = false;
                 AIMove(IBotDifficulty);
 
             }else{
-                System.out.println("This is not a valid option enter either S or P!");
+                System.out.println("This is not a valid option enter either B or P!");
             }
         }
 
@@ -174,32 +173,7 @@ public class Main {
             int yadition = 0;
 
             //This if Statement works out the directional x and y modifyers.
-            if(i == 0 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = 1;
-            }else if(i == 1 && LastMove[1] != 0){
-                xadition = 1;
-                yadition = 1;
-            }else if(i == 2 && LastMove[1] != 0){
-                xadition = 1;
-                yadition = 0;
-            }else if(i == 3 && LastMove[1] != 0){
-                xadition = 1;
-                yadition = -1;
-            }else if(i == 4 && LastMove[1] != 0){
-                xadition = 0;
-                yadition = -1;
-            }else if(i == 5 && LastMove[1] != 0){
-                xadition = -1;
-                yadition = -1;
-            }else if(i == 6 && LastMove[1] != 0){
-                xadition = -1;
-                yadition = 0;
-            }else if(i == 7 && LastMove[1] != 0){
-                xadition = -1;
-                yadition = 1;
-            }
-
+            AxisAditions();
             //Finds the cords inbetween the last cords and the next user token in the direction iterating.
             int[] IACurrentCords = LastMove;
             List<int[]> LAInbetweenCords = new ArrayList<int[]>();
@@ -222,11 +196,44 @@ public class Main {
         }
     }
 
+    public static int[] AxisAditions(int i){
+        int xadition = 0;
+        int yadition = 0;
+        if(i == 0 && LastMove[1] != 0){
+            xadition = 0;
+            yadition = 1;
+        }else if(i == 1 && LastMove[1] != 0){
+            xadition = 1;
+            yadition = 1;
+        }else if(i == 2 && LastMove[1] != 0){
+            xadition = 1;
+            yadition = 0;
+        }else if(i == 3 && LastMove[1] != 0){
+            xadition = 1;
+            yadition = -1;
+        }else if(i == 4 && LastMove[1] != 0){
+            xadition = 0;
+            yadition = -1;
+        }else if(i == 5 && LastMove[1] != 0){
+            xadition = -1;
+            yadition = -1;
+        }else if(i == 6 && LastMove[1] != 0){
+            xadition = -1;
+            yadition = 0;
+        }else if(i == 7 && LastMove[1] != 0){
+            xadition = -1;
+            yadition = 1;
+        }
+        int[] xyadition = {xadition, yadition};
+        return xyadition;
+    }
+
     //This function checks the bots difficulty and moves accordingly.
     public static void AIMove(int IBotDifficulty){
 
         if(IBotDifficulty == 0){
             Boolean BBotMoveMade = false;
+            int IVsUserToken = 2;
             while (BBotMoveMade == false) {
                 //Generates random cords.
                 Random RANDBotMove = new Random();
@@ -238,7 +245,9 @@ public class Main {
                     Grid[xcord][ycord] = 2;
                     int [] xycords = {xcord, ycord};
                     LastMove = xycords;
-                    BBotMoveMade = true;
+                    for(int i = 0; i < 8; i++){
+
+                    }
                 }
             }
         }
@@ -248,7 +257,7 @@ public class Main {
     private  static Integer ReadUserInt(String SMessage){
         Boolean BUserChoiceValid = false;
         int IUserInput = 0;
-        while(BUserChoiceValid) {
+        while(BUserChoiceValid == false) {
             System.out.println(SMessage);
             Scanner ReadUser = new Scanner(System.in);
             try {
@@ -266,11 +275,19 @@ public class Main {
     public static void UserMove(int UserToken, String PlayerName){
         Boolean BUserChoiceValid = false;
         int[] IAUserCords = {0, 0};
+        int IVsUserToken = 0;
+        if(UserToken == 1){
+            IVsUserToken = 2;
+        }else if(UserToken == 2){
+            IVsUserToken = 1;
+        }
         while (BUserChoiceValid == false) {
             IAUserCords[0] = ReadUserInt("Enter X Co-ordinate of the tile you want to place your piece on: ");
             IAUserCords[1] = ReadUserInt("Enter Y Co-ordinate of the tile you want to place your piece on: ");
             if(IAUserCords[0] < 8 && IAUserCords[0] >= 0 && IAUserCords[1] < 8 && IAUserCords[1] >= 0){
-                BUserChoiceValid = true;
+                if(Grid[IAUserCords[0] + 1][IAUserCords[1]] == IVsUserToken || Grid[IAUserCords[0]][IAUserCords[1] + 1] == IVsUserToken || Grid[IAUserCords[0] - 1][IAUserCords[1]] == IVsUserToken || Grid[IAUserCords[0]][IAUserCords[1] - 1] == IVsUserToken || Grid[IAUserCords[0] + 1][IAUserCords[1] + 1] == IVsUserToken || Grid[IAUserCords[0] - 1][IAUserCords[1] + 1] == IVsUserToken || Grid[IAUserCords[0] + 1][IAUserCords[1] - 1] == IVsUserToken || Grid[IAUserCords[0] - 1][IAUserCords[1] - 1] == IVsUserToken){
+                    BUserChoiceValid = true;
+                }
             }
         }
         Grid[IAUserCords[0]][IAUserCords[1]] = UserToken;
