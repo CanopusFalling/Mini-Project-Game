@@ -162,13 +162,13 @@ public class Main {
         }
     }
 
-    public static void PostMoveModification(int[] LocalLastMove){
-        //Works out the token of the last player.
-        Integer ILastPlayerToken = Grid[LocalLastMove[0]][LocalLastMove[1]];
+    public static int PostMoveModification(int[] LocalLastMove, int PlayerToken, boolean BDummy){
+        int IChangeCount = 0;
 
         //Proceeds to find the nearest token of the player's nature in all directions.
         for(int i = 0; i <= 7; i++){
             Boolean BFoundEnd = false;
+            boolean BValidEnd = false;
             //This if Statement works out the directional x and y modifiers based on the turn.
             int [] xyaddition = DirectionalModifiers(i);
             int xadition = xyaddition[0];
@@ -184,16 +184,17 @@ public class Main {
                 //Checks if the edge of the grid is reached.
                 if(IACurrentCords[0] > 7 || IACurrentCords[1] > 7 || IACurrentCords[0] < 0 || IACurrentCords[1] < 0 ){
                     BFoundEnd = true;
-                }else if(Grid[IACurrentCords[0]][IACurrentCords[1]] == ILastPlayerToken){
+                }else if(Grid[IACurrentCords[0]][IACurrentCords[1]] == PlayerToken){
                     //Adds in all of the cords inbetween as the user's token.
                     for (int[] j : LAInbetweenCords){
-                        Grid[j[0]][j[1]] = ILastPlayerToken;
+                        Grid[j[0]][j[1]] = PlayerToken;
                     }
                     BFoundEnd = true;
                 }
                 LAInbetweenCords.add(IACurrentCords);
             }
         }
+        return IChangeCount;
     }
 
     //Works out the directional modifiers
@@ -218,13 +219,6 @@ public class Main {
             Boolean BBotMoveMade = false;
             int IVsUserToken = 2;
             while (BBotMoveMade == false) {
-                //Generates random cords.
-                Random RANDBotMove = new Random();
-                int xcord = RANDBotMove.nextInt(7);
-                Random RANDBotMove2 = new Random();
-                int ycord = RANDBotMove2.nextInt(7);
-                //finds out if the cords are taken and adds them to the grid.
-                if(Grid[xcord][ycord] == 0){
                     //creates a list of possible moves based on the pieces around it.
                     List<int[]> possiblecords = null;
                     for(int i = 0; i < 8; i++){
@@ -247,12 +241,11 @@ public class Main {
                         }
                     }
                     for(int[] currentcords: possiblecords){
-
+                        int ICords = PostMoveModification(currentcords, IVsUserToken, true);
                     }
                 }
             }
         }
-    }
 
     //Reads an Int from the user.
     private  static Integer ReadUserInt(String SMessage){
@@ -294,8 +287,7 @@ public class Main {
         Grid[IAUserCords[0]][IAUserCords[1]] = UserToken;
         LastMove = IAUserCords;
 
-        PostMoveModification(LastMove);
-
+        PostMoveModification(LastMove, UserToken, false);
     }
 }
 
