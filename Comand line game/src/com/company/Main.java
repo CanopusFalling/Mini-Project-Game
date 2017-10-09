@@ -162,20 +162,20 @@ public class Main {
         }
     }
 
-    public static void PostMoveModification(){
+    public static void PostMoveModification(int[] LocalLastMove){
         //Works out the token of the last player.
-        Integer ILastPlayerToken = Grid[LastMove[0]][LastMove[1]];
+        Integer ILastPlayerToken = Grid[LocalLastMove[0]][LocalLastMove[1]];
 
         //Proceeds to find the nearest token of the player's nature in all directions.
         for(int i = 0; i <= 7; i++){
             Boolean BFoundEnd = false;
-            int xadition = 0;
-            int yadition = 0;
+            //This if Statement works out the directional x and y modifiers based on the turn.
+            int [] xyaddition = DirectionalModifiers(i);
+            int xadition = xyaddition[0];
+            int yadition = xyaddition[1];
 
-            //This if Statement works out the directional x and y modifyers.
-            AxisAditions();
             //Finds the cords inbetween the last cords and the next user token in the direction iterating.
-            int[] IACurrentCords = LastMove;
+            int[] IACurrentCords = LocalLastMove;
             List<int[]> LAInbetweenCords = new ArrayList<int[]>();
             
             while(BFoundEnd == false){
@@ -196,36 +196,19 @@ public class Main {
         }
     }
 
-    public static int[] AxisAditions(int i){
-        int xadition = 0;
-        int yadition = 0;
-        if(i == 0 && LastMove[1] != 0){
-            xadition = 0;
-            yadition = 1;
-        }else if(i == 1 && LastMove[1] != 0){
-            xadition = 1;
-            yadition = 1;
-        }else if(i == 2 && LastMove[1] != 0){
-            xadition = 1;
-            yadition = 0;
-        }else if(i == 3 && LastMove[1] != 0){
-            xadition = 1;
-            yadition = -1;
-        }else if(i == 4 && LastMove[1] != 0){
-            xadition = 0;
-            yadition = -1;
-        }else if(i == 5 && LastMove[1] != 0){
-            xadition = -1;
-            yadition = -1;
-        }else if(i == 6 && LastMove[1] != 0){
-            xadition = -1;
-            yadition = 0;
-        }else if(i == 7 && LastMove[1] != 0){
-            xadition = -1;
-            yadition = 1;
+    //Works out the directional modifiers
+    public static int[] DirectionalModifiers(int turn){
+        int[] IAModifications = {0 , 0};
+        int counter = 0;
+        for(int i = -1; i >= 1; i++){
+            for(int j = -1; j >= 1; j++){
+                if(counter == turn){
+                    IAModifications[0] = i;
+                    IAModifications[1] = j;
+                }
+            }
         }
-        int[] xyadition = {xadition, yadition};
-        return xyadition;
+        return IAModifications;
     }
 
     //This function checks the bots difficulty and moves accordingly.
@@ -242,10 +225,28 @@ public class Main {
                 int ycord = RANDBotMove2.nextInt(7);
                 //finds out if the cords are taken and adds them to the grid.
                 if(Grid[xcord][ycord] == 0){
-                    Grid[xcord][ycord] = 2;
-                    int [] xycords = {xcord, ycord};
-                    LastMove = xycords;
+                    //creates a list of possible moves based on the pieces around it.
+                    List<int[]> possiblecords = null;
                     for(int i = 0; i < 8; i++){
+                        for(int j = 0; j < 8; j++){
+                            for(int c = 0; c < 8; c++) {
+                                int[] xymod = DirectionalModifiers(c);
+                                int xmod = xymod[0];
+                                int ymod = xymod[1];
+                                if(i + xmod <= 7 || i + xmod >= 0 || i + ymod <= 7 || i + xmod >= 0) {
+                                    boolean BCordsAdded = false;
+                                    if (Grid[i + xmod][j + ymod] == 1) {
+                                        if(BCordsAdded == false) {
+                                            int[] xycords = {i, j};
+                                            possiblecords.add(xycords);
+                                            BCordsAdded = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for(int[] currentcords: possiblecords){
 
                     }
                 }
@@ -293,7 +294,7 @@ public class Main {
         Grid[IAUserCords[0]][IAUserCords[1]] = UserToken;
         LastMove = IAUserCords;
 
-        PostMoveModification();
+        PostMoveModification(LastMove);
 
     }
 }
